@@ -93,3 +93,41 @@ def plot_model_performance(y_test, y_pred, y_prob, model_name="Model"):
     
     plt.tight_layout()
     plt.show()
+
+from sklearn.ensemble import RandomForestClassifier
+
+def train_random_forest(X_train, y_train, class_weight='balanced'):
+    """
+    Trains a Random Forest model with robust initial parameters.
+    """
+    # Initialize Random Forest
+    rf_model = RandomForestClassifier(
+        n_estimators=200,          # Sufficient number of trees
+        max_depth=15,              # Limit depth to prevent overfitting
+        min_samples_split=10,      # Require 10 samples to create a new split
+        min_samples_leaf=4,        # Require 4 samples in a leaf (smooths predictions)
+        max_features='sqrt',       # Standard for classification
+        class_weight=class_weight, # Handles imbalance automatically
+        random_state=42,
+        n_jobs=-1                  # Use all CPU cores
+    )
+    
+    # Fit model
+    rf_model.fit(X_train, y_train)
+    
+    return rf_model
+
+def get_feature_importance(model, feature_names):
+    """
+    Extracts feature importance from the trained Random Forest.
+    """
+    importances = model.feature_importances_
+    indices = np.argsort(importances)[::-1]
+    
+    # Create DataFrame
+    feature_imp_df = pd.DataFrame({
+        'Feature': [feature_names[i] for i in indices],
+        'Importance': importances[indices]
+    })
+    
+    return feature_imp_df
