@@ -150,18 +150,18 @@ desktop.ini
 
 # Data files
 # Ignore all data files but keep the directory structure
-data/raw/*.csv
-data/raw/*.xlsx
-data/raw/*.json
-data/raw/*.parquet
-data/processed/*.csv
-data/processed/*.xlsx
-data/processed/*.json
-data/processed/*.parquet
-data/results/*.csv
-data/results/*.xlsx
-data/results/*.json
-data/results/*.txt
+# data/raw/*.csv
+# data/raw/*.xlsx
+# data/raw/*.json
+# data/raw/*.parquet
+# data/processed/*.csv
+# data/processed/*.xlsx
+# data/processed/*.json
+# data/processed/*.parquet
+# data/results/*.csv
+# data/results/*.xlsx
+# data/results/*.json
+# data/results/*.txt
 
 # Keep README files in data directories
 !data/raw/README.md
