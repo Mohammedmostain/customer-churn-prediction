@@ -3,6 +3,8 @@ import numpy as np
 import os
 from sklearn.model_selection import train_test_split
 from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR, RANDOM_STATE, TEST_SIZE, TARGET_VARIABLE
+# Import the feature engineering function we created in the previous step
+from src.feature_engineering import apply_feature_engineering
 
 def load_data(file_name):
     """
@@ -77,7 +79,7 @@ def encode_data(df):
         df[TARGET_VARIABLE] = df[TARGET_VARIABLE].map({'Yes': 1, 'No': 0})
     
     # Identify categorical columns (excluding target)
-    cat_cols = df.select_dtypes(include=['object']).columns.tolist()
+    cat_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
     
     # One-Hot Encoding
     df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
@@ -125,15 +127,19 @@ def run_preprocessing_pipeline(file_name='WA_Fn-UseC_-Telco-Customer-Churn.csv')
     # 2. Clean
     df = clean_data(df)
     
-    # 3. Outliers (Optional but requested)
-    # We apply it to numerical cols. Note: Be cautious with TotalCharges in Churn prediction.
-    num_cols = ['tenure', 'MonthlyCharges', 'TotalCharges']
+    # 3. Feature Engineering (New Step)
+    # Applies the custom features before outlier handling/encoding
+    df = apply_feature_engineering(df)
+    
+    # 4. Outliers
+    # Update numerical columns to include new financial feature 'AvgMonthlySpend'
+    num_cols = ['tenure', 'MonthlyCharges', 'TotalCharges', 'AvgMonthlySpend']
     df = handle_outliers(df, num_cols)
     
-    # 4. Encode
+    # 5. Encode
     df = encode_data(df)
     
-    # 5. Split & Save
+    # 6. Split & Save
     return split_and_save_data(df)
 
 if __name__ == "__main__":
