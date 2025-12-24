@@ -170,7 +170,7 @@ desktop.ini
 
 # Model files (usually too large for git)
 models/*.pkl
-models/*.joblib
+# models/*.joblib
 models/*.h5
 models/*.pt
 models/*.pth
